@@ -1,0 +1,54 @@
+<div class="form-inner nospace">
+	  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+      <label>Image Gallery</label>
+    </div>
+    <div class="col-lg-9 col-md-9 col-sm-12 col-xs-12">
+    	<div class="row">
+        	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            	<input name="imagegallery[]" id="imagegallery" type="file" accept="image/*" class="nowidthfile" multiple>
+          </div>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+         	  <div class="row" id="imgpre">
+                	
+            </div>
+		      </div>
+	    </div>
+    </div>
+</div>
+<script>
+window.onload = function () {
+	//for gallery images
+    var imagegallery = document.getElementById("imagegallery");
+    imagegallery.onchange = function () {
+        if (typeof (FileReader) != "undefined") {
+            var dvPreview = document.getElementById("imgpre");
+            //dvPreview.innerHTML = "";
+            jQuery(".imgtcl").remove();
+            var regex = /^([a-zA-Z0-9\s_\\.\-:])+(.jpg|.jpeg|.gif|.png|.bmp)$/;
+            var tmpvar = 0;
+            for (var i = 0; i < imagegallery.files.length; i++) {
+                var file = imagegallery.files[i];
+                if (regex.test(file.name.toLowerCase())) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        jQuery("#imgpre").prepend("<div class='col-lg-3 col-md-3 col-sm-3 col-xs-12 imgtcl imgtcl"+tmpvar+"'><div class='img-butt-box'><img src='"+e.target.result+"'><input class='lava-add-item-map-search-find' value='Delete' onclick=deltimg('"+tmpvar+"') type='button'></div></div>");
+                        tmpvar++;
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    alert(file.name + " is not a valid image file.");
+                    //dvPreview.innerHTML = "";
+                    jQuery(".imgtcl").remove();
+                    return false;
+                }
+            }
+        } else {
+            alert("This browser does not support HTML5 FileReader.");
+        }
+    }
+}
+function deltimg(imgid){
+	jQuery("#deletetimages").val((jQuery("#deletetimages").val())+" "+imgid);
+	jQuery(".imgtcl"+imgid).remove();
+}
+</script>
